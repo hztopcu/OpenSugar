@@ -1,7 +1,7 @@
 <!-- README.md (Apple-style, HTML + Markdown compatible) -->
 
 <div align="center">
-  <h1>OpenSugar</h1>
+  <h1>🩸 OpenSugar 🩸</h1>
   <p>A calm, colorful, Apple Health–inspired personal glucose journal.</p>
 
   <p>
