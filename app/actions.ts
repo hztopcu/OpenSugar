@@ -293,18 +293,18 @@ export async function parseAndSaveLabPdf(
     return { error: "File is too large (max 10 MB)." };
 
   try {
-    const { PDFParse } = await import("pdf-parse");
     const arrayBuffer = await file.arrayBuffer();
-    const parser = new PDFParse({ data: new Uint8Array(arrayBuffer) });
-    const result = await parser.getText();
-    const text = result?.text ?? "";
-    await parser.destroy();
+    const { extractTextFromPdfBuffer } = await import("@/lib/pdf-text-extract");
+    const text = await extractTextFromPdfBuffer(arrayBuffer);
+
+    console.log("[parseAndSaveLabPdf] raw text length:", text.length);
+    console.log("[parseAndSaveLabPdf] raw text (first 2000 chars):", text.slice(0, 2000));
 
     if (!text.trim()) return { error: "Could not extract text from this PDF." };
 
     const { date, entries } = extractLabEntriesFromText(text);
     if (entries.length === 0)
-      return { error: "No lab markers (e.g. HbA1c, Glucose, HDL, LDL) found in the PDF." };
+      return { error: "No lab markers (e.g. Glukoz, Kreatinin, HbA1c, HDL, LDL) found in the PDF." };
 
     const testDate =
       date &&
