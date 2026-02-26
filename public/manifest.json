@@ -1,0 +1,10 @@
+{
+  "name": "OpenSugar",
+  "short_name": "OpenSugar",
+  "description": "Blood glucose and medication tracker",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0c8ee6",
+  "orientation": "portrait-primary"
+}

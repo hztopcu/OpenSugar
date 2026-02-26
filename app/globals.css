@@ -1,0 +1,318 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Apple Health–inspired soft vibrant palette */
+    --background: 40 20% 98%;
+    --foreground: 240 10% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 15%;
+    /* Soft blue (friendly, not enterprise) */
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 330 60% 96%;
+    --secondary-foreground: 240 10% 15%;
+    --muted: 40 15% 95%;
+    --muted-foreground: 240 5% 45%;
+    --accent: 280 60% 96%;
+    --accent-foreground: 240 10% 15%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 65% 42%;
+    --warning: 35 95% 55%;
+    /* Apple Health–style vibrant accents */
+    --health-pink: 340 82% 65%;
+    --health-pink-red: 350 78% 58%;
+    --health-orange: 28 100% 58%;
+    --health-morning: 32 95% 62%;
+    --health-evening: 265 75% 62%;
+    --health-green: 145 65% 42%;
+    --health-blue: 208 100% 62%;
+    --border: 40 15% 90%;
+    --input: 40 15% 90%;
+    --ring: 210 100% 60%;
+    --radius: 0.75rem;
+    --radius-card: 22px;
+    --radius-sm: 0.5rem;
+    --sidebar-width: 240px;
+    --bottom-nav-height: 64px;
+    --transition-duration: 150ms;
+    /* Header: pink → orange → light purple (multi-stop) */
+    --header-gradient-from: 340 75% 90%;
+    --header-gradient-mid: 25 85% 88%;
+    --header-gradient-to: 280 50% 88%;
+    --card-shadow: 0 8px 32px -4px rgb(0 0 0 / 0.08), 0 4px 12px -2px rgb(0 0 0 / 0.04);
+  }
+
+  .dark {
+    --background: 240 12% 8%;
+    --foreground: 40 10% 95%;
+    --card: 240 10% 12%;
+    --card-foreground: 40 10% 95%;
+    --popover: 240 10% 12%;
+    --popover-foreground: 40 10% 95%;
+    --primary: 210 100% 62%;
+    --primary-foreground: 240 12% 8%;
+    --secondary: 280 30% 18%;
+    --secondary-foreground: 40 10% 95%;
+    --muted: 240 10% 18%;
+    --muted-foreground: 40 5% 60%;
+    --accent: 280 30% 18%;
+    --accent-foreground: 40 10% 95%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 55% 45%;
+    --warning: 35 90% 55%;
+    --health-pink: 340 70% 60%;
+    --health-pink-red: 350 70% 55%;
+    --health-orange: 28 95% 55%;
+    --health-morning: 32 90% 55%;
+    --health-evening: 265 60% 55%;
+    --health-green: 145 55% 45%;
+    --health-blue: 208 100% 62%;
+    --border: 240 12% 22%;
+    --input: 240 12% 22%;
+    --ring: 210 100% 62%;
+    --header-gradient-from: 340 40% 22%;
+    --header-gradient-mid: 280 35% 20%;
+    --header-gradient-to: 260 45% 18%;
+    --card-shadow: 0 8px 36px -4px rgb(0 0 0 / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Apple-style floating card shadow */
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--card-shadow);
+  }
+  .shadow-card {
+    box-shadow: var(--card-shadow);
+  }
+}
+
+.transition-smooth {
+  transition-duration: var(--transition-duration);
+}
+
+/* Fade-in for modules */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out forwards;
+}
+
+.animate-fade-in-up-delay-1 { animation-delay: 50ms; }
+.animate-fade-in-up-delay-2 { animation-delay: 100ms; }
+.animate-fade-in-up-delay-3 { animation-delay: 150ms; }
+.animate-fade-in-up-delay-4 { animation-delay: 200ms; }
+.animate-fade-in-up-delay-5 { animation-delay: 250ms; }
+
+/* Save success bounce */
+@keyframes save-bounce {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.08); }
+  70% { transform: scale(0.98); }
+}
+
+.animate-save-bounce {
+  animation: save-bounce 0.5s ease-out;
+}
+
+/* Card hover lift (desktop) */
+@media (min-width: 768px) {
+  .hover-lift:hover {
+    transform: scale(1.01);
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+  }
+}
+
+/* Apple Health header gradient: pink → orange → light purple */
+.header-gradient {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--header-gradient-from)) 0%,
+    hsl(var(--header-gradient-mid)) 50%,
+    hsl(var(--header-gradient-to)) 100%
+  );
+}
+
+/* ---- Sidebar nav icon gradients (Apple Health DNA) ---- */
+:root {
+  --nav-dash-from: 198 85% 58%;
+  --nav-dash-to: 185 75% 52%;
+  --nav-add-from: 24 95% 58%;
+  --nav-add-to: 358 72% 62%;
+  --nav-meds-from: 152 48% 48%;
+  --nav-meds-to: 168 45% 55%;
+  --nav-lab-from: 262 55% 62%;
+  --nav-lab-to: 278 58% 56%;
+  --nav-report-from: 338 78% 62%;
+  --nav-report-to: 352 75% 56%;
+  --nav-signout-from: 240 6% 68%;
+  --nav-signout-to: 240 6% 58%;
+  --nav-icon-shadow: 0 2px 8px -1px rgb(0 0 0 / 0.08);
+  --nav-icon-shadow-hover: 0 4px 14px -2px rgb(0 0 0 / 0.12);
+  --nav-icon-glow: 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.dark {
+  --nav-dash-from: 198 75% 48%;
+  --nav-dash-to: 185 70% 42%;
+  --nav-add-from: 24 90% 52%;
+  --nav-add-to: 358 65% 55%;
+  --nav-meds-from: 152 42% 40%;
+  --nav-meds-to: 168 40% 48%;
+  --nav-lab-from: 262 50% 52%;
+  --nav-lab-to: 278 52% 46%;
+  --nav-report-from: 338 70% 54%;
+  --nav-report-to: 352 68% 48%;
+  --nav-signout-from: 240 8% 42%;
+  --nav-signout-to: 240 8% 34%;
+  --nav-icon-shadow: 0 2px 10px -1px rgb(0 0 0 / 0.35);
+  --nav-icon-shadow-hover: 0 4px 16px -2px rgb(0 0 0 / 0.4);
+  --nav-icon-glow: 0 0 0 1px rgb(255 255 255 / 0.12);
+}
+
+.nav-icon-bg-dashboard {
+  background: linear-gradient(145deg, hsl(var(--nav-dash-from)), hsl(var(--nav-dash-to)));
+  box-shadow: var(--nav-icon-shadow);
+}
+.nav-icon-bg-add {
+  background: linear-gradient(145deg, hsl(var(--nav-add-from)), hsl(var(--nav-add-to)));
+  box-shadow: var(--nav-icon-shadow);
+}
+.nav-icon-bg-meds {
+  background: linear-gradient(145deg, hsl(var(--nav-meds-from)), hsl(var(--nav-meds-to)));
+  box-shadow: var(--nav-icon-shadow);
+}
+.nav-icon-bg-lab {
+  background: linear-gradient(145deg, hsl(var(--nav-lab-from)), hsl(var(--nav-lab-to)));
+  box-shadow: var(--nav-icon-shadow);
+}
+.nav-icon-bg-report {
+  background: linear-gradient(145deg, hsl(var(--nav-report-from)), hsl(var(--nav-report-to)));
+  box-shadow: var(--nav-icon-shadow);
+}
+.nav-icon-bg-signout {
+  background: linear-gradient(145deg, hsl(var(--nav-signout-from)), hsl(var(--nav-signout-to)));
+  box-shadow: var(--nav-icon-shadow);
+}
+
+/* Sidebar link hover: scale icon container */
+.sidebar-nav-link:hover .sidebar-icon-wrap {
+  transform: scale(1.05);
+  box-shadow: var(--nav-icon-shadow-hover);
+  filter: brightness(1.06);
+}
+.sidebar-nav-link:hover .sidebar-icon-wrap.nav-icon-bg-dashboard { animation: nav-icon-pulse 2.5s ease-in-out infinite; }
+.sidebar-nav-link:hover .sidebar-icon-wrap.nav-icon-bg-add { animation: nav-icon-bounce 0.5s ease-out; }
+.sidebar-nav-link:not(:hover) .sidebar-icon-wrap.nav-icon-bg-add { animation: none; }
+
+/* Active state: vibrant + halo */
+.sidebar-nav-link[data-active="true"] .sidebar-icon-wrap {
+  box-shadow: var(--nav-icon-shadow-hover), var(--nav-icon-glow);
+  filter: brightness(1.1);
+}
+
+/* Micro-animations (subtle, Apple-like) */
+@keyframes nav-icon-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.88; }
+}
+@keyframes nav-icon-bounce {
+  0%, 100% { transform: scale(1.05) translateY(0); }
+  40% { transform: scale(1.05) translateY(-2px); }
+  70% { transform: scale(1.05) translateY(0.5px); }
+}
+@keyframes nav-icon-shimmer {
+  0% { filter: brightness(1.06); }
+  50% { filter: brightness(1.14); }
+  100% { filter: brightness(1.06); }
+}
+@keyframes nav-icon-glow {
+  0%, 100% { box-shadow: var(--nav-icon-shadow-hover); }
+  50% { box-shadow: var(--nav-icon-shadow-hover), 0 0 12px -2px hsl(var(--nav-lab-from) / 0.5); }
+}
+@keyframes nav-icon-highlight {
+  0% { background-size: 0% 100%; }
+  100% { background-size: 100% 100%; }
+}
+
+.sidebar-nav-link:hover .sidebar-icon-wrap.nav-icon-bg-meds {
+  animation: nav-icon-shimmer 1.2s ease-in-out;
+}
+.sidebar-nav-link:hover .sidebar-icon-wrap.nav-icon-bg-lab {
+  animation: nav-icon-glow 1.5s ease-in-out;
+}
+.sidebar-nav-link:hover .sidebar-icon-wrap.nav-icon-bg-report::after {
+  animation: nav-icon-highlight 0.35s ease-out forwards;
+}
+
+.sidebar-icon-wrap {
+  transition: transform 170ms ease-out, box-shadow 170ms ease-out, filter 170ms ease-out;
+}
+.sidebar-icon-wrap.nav-icon-bg-dashboard {
+  animation: nav-icon-pulse 3s ease-in-out infinite;
+}
+.sidebar-icon-wrap.nav-icon-bg-report {
+  position: relative;
+  overflow: hidden;
+}
+.sidebar-icon-wrap.nav-icon-bg-report::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.2), transparent);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Active link: accent text + soft tinted background per route */
+.sidebar-nav-link[data-active="true"][data-route="dashboard"] {
+  color: hsl(var(--nav-dash-from));
+  background-color: hsl(var(--nav-dash-from) / 0.12);
+}
+.sidebar-nav-link[data-active="true"][data-route="add"] {
+  color: hsl(var(--nav-add-from));
+  background-color: hsl(var(--nav-add-from) / 0.12);
+}
+.sidebar-nav-link[data-active="true"][data-route="medications"] {
+  color: hsl(var(--nav-meds-from));
+  background-color: hsl(var(--nav-meds-from) / 0.12);
+}
+.sidebar-nav-link[data-active="true"][data-route="lab"] {
+  color: hsl(var(--nav-lab-from));
+  background-color: hsl(var(--nav-lab-from) / 0.12);
+}
+.sidebar-nav-link[data-active="true"][data-route="report"] {
+  color: hsl(var(--nav-report-from));
+  background-color: hsl(var(--nav-report-from) / 0.12);
+}
