@@ -6,11 +6,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { SmartGlucoseAlerts } from "@/components/smart-glucose-alerts";
+import { useLanguage } from "@/components/language-provider";
 import { Check, Plus } from "lucide-react";
 
 type Segment = "Morning" | "Evening";
 
 export function QuickAddCard() {
+  const { t } = useLanguage();
   const [segment, setSegment] = useState<Segment>("Morning");
   const [value, setValue] = useState("");
   const [pending, setPending] = useState(false);
@@ -22,7 +24,7 @@ export function QuickAddCard() {
     e.preventDefault();
     const num = value.trim() ? parseInt(value, 10) : NaN;
     if (!Number.isFinite(num) || num < 0 || num > 999) {
-      setError("Enter a value between 0 and 999");
+      setError(t("dashboard.enterValueBetween"));
       return;
     }
     setError(null);
@@ -58,8 +60,8 @@ export function QuickAddCard() {
             <Plus className="h-5 w-5 text-[hsl(var(--health-blue))]" strokeWidth={1.8} />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Quick Add</h2>
-            <p className="text-sm text-muted-foreground">Log a reading in one tap</p>
+            <h2 className="text-xl font-bold tracking-tight">{t("dashboard.quickAdd")}</h2>
+            <p className="text-sm text-muted-foreground">{t("dashboard.quickAddHint")}</p>
           </div>
         </div>
       </CardHeader>
@@ -78,7 +80,7 @@ export function QuickAddCard() {
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {s}
+                {s === "Morning" ? t("dashboard.morning") : t("dashboard.evening")}
               </button>
             ))}
           </div>
@@ -112,7 +114,7 @@ export function QuickAddCard() {
               ) : success ? (
                 <Check className="h-6 w-6" />
               ) : (
-                "Save"
+                t("dashboard.save")
               )}
             </button>
           </div>

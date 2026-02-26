@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Sun } from "lucide-react";
+import { useLanguage } from "@/components/language-provider";
 
 type Status = "low" | "normal" | "slightly_high" | "high";
 
@@ -13,31 +14,14 @@ function getStatus(value: number): Status {
   return "high";
 }
 
-const statusConfig: Record<
-  Status,
-  { label: string; dot: string; bg: string }
-> = {
-  low: {
-    label: "Low",
-    dot: "bg-[hsl(var(--health-blue))]",
-    bg: "bg-[hsl(var(--health-blue))]/12",
-  },
-  normal: {
-    label: "In range",
-    dot: "bg-[hsl(var(--health-green))]",
-    bg: "bg-[hsl(var(--health-green))]/12",
-  },
-  slightly_high: {
-    label: "Slightly high",
-    dot: "bg-[hsl(var(--health-orange))]",
-    bg: "bg-[hsl(var(--health-orange))]/12",
-  },
-  high: {
-    label: "High",
-    dot: "bg-[hsl(var(--health-pink-red))]",
-    bg: "bg-[hsl(var(--health-pink-red))]/12",
-  },
-};
+function getStatusConfig(t: (key: string) => string): Record<Status, { label: string; dot: string; bg: string }> {
+  return {
+    low: { label: t("dashboard.low"), dot: "bg-[hsl(var(--health-blue))]", bg: "bg-[hsl(var(--health-blue))]/12" },
+    normal: { label: t("dashboard.inRange"), dot: "bg-[hsl(var(--health-green))]", bg: "bg-[hsl(var(--health-green))]/12" },
+    slightly_high: { label: t("dashboard.slightlyHigh"), dot: "bg-[hsl(var(--health-orange))]", bg: "bg-[hsl(var(--health-orange))]/12" },
+    high: { label: t("dashboard.high"), dot: "bg-[hsl(var(--health-pink-red))]", bg: "bg-[hsl(var(--health-pink-red))]/12" },
+  };
+}
 
 interface TodayReading {
   value: number;
@@ -54,10 +38,12 @@ function Block({
   label,
   reading,
   periodTint,
+  statusConfig,
 }: {
   label: string;
   reading: TodayReading | null;
   periodTint: "morning" | "evening";
+  statusConfig: Record<Status, { label: string; dot: string; bg: string }>;
 }) {
   if (!reading) {
     return (
@@ -102,6 +88,8 @@ function Block({
 }
 
 export function TodaysGlucoseCard({ morning, evening }: TodaysGlucoseCardProps) {
+  const { t } = useLanguage();
+  const statusConfig = getStatusConfig(t);
   const hasAny = morning || evening;
   return (
     <Card className="overflow-hidden opacity-0 animate-fade-in-up animate-fade-in-up-delay-1 hover-lift transition-smooth">
@@ -111,24 +99,24 @@ export function TodaysGlucoseCard({ morning, evening }: TodaysGlucoseCardProps) 
             <Sun className="h-5 w-5 text-[hsl(var(--health-orange))]" strokeWidth={1.8} />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Today</h2>
-            <p className="text-sm text-muted-foreground">Morning & evening at a glance</p>
+            <h2 className="text-xl font-bold tracking-tight">{t("dashboard.today")}</h2>
+            <p className="text-sm text-muted-foreground">{t("dashboard.todayHint")}</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {hasAny ? (
           <div className="grid grid-cols-2 gap-4">
-            <Block label="Morning" reading={morning} periodTint="morning" />
-            <Block label="Evening" reading={evening} periodTint="evening" />
+            <Block label={t("dashboard.morning")} reading={morning} periodTint="morning" statusConfig={statusConfig} />
+            <Block label={t("dashboard.evening")} reading={evening} periodTint="evening" statusConfig={statusConfig} />
           </div>
         ) : (
           <div className="rounded-2xl bg-muted/30 py-12 text-center">
             <p className="text-sm font-medium text-muted-foreground">
-              No readings today yet
+              {t("dashboard.noReadingsTodayYet")}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Add a reading to see your day at a glance
+              {t("dashboard.addFirstReadingHint")}
             </p>
           </div>
         )}

@@ -29,6 +29,16 @@ export function AddGlucoseForm() {
   const [state, setState] = useState<FormState>(initialState);
   const [pending, setPending] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("Fasting");
+  const [measuredAt, setMeasuredAt] = useState<string>(() => {
+    const d = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const year = d.getFullYear();
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const hours = pad(d.getHours());
+    const minutes = pad(d.getMinutes());
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -55,11 +65,11 @@ export function AddGlucoseForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-3">
         <Label className="text-sm font-medium text-foreground">
-          Measurement type
+          {t("add.measurementType")}
         </Label>
         <div
           role="group"
-          aria-label="Measurement type"
+          aria-label={t("dashboard.measurementType")}
           className="flex gap-1 rounded-xl border border-border bg-muted/30 p-1"
         >
           {TYPE_OPTIONS.map(({ value, labelKey }) => (
@@ -83,7 +93,7 @@ export function AddGlucoseForm() {
 
       <div className="space-y-2">
         <Label htmlFor="value" className="text-sm font-medium">
-          Blood glucose (mg/dL)
+          {t("add.bloodGlucoseLabel")}
         </Label>
         <Input
           id="value"
@@ -91,11 +101,26 @@ export function AddGlucoseForm() {
           type="number"
           min={0}
           max={999}
-          placeholder="e.g. 98"
+          placeholder={t("add.valuePlaceholder")}
           required
           value={valueInput}
           onChange={(e) => setValueInput(e.target.value)}
           className="h-12 text-lg tabular-nums"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="measured_at" className="text-sm font-medium">
+          {t("add.dateAndTime")}
+        </Label>
+        <Input
+          id="measured_at"
+          name="measured_at"
+          type="datetime-local"
+          value={measuredAt}
+          onChange={(e) => setMeasuredAt(e.target.value)}
+          className="h-11"
+          required
         />
       </div>
 
@@ -104,23 +129,22 @@ export function AddGlucoseForm() {
           role="alert"
           className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
         >
-          <p className="font-medium">High reading</p>
+          <p className="font-medium">{t("add.highReadingTitle")}</p>
           <p className="mt-0.5 text-destructive/90">
-            This value is above 180 mg/dL. Consider drinking water and
-            consulting your care plan if this persists.
+            {t("add.highReadingDesc")}
           </p>
         </div>
       )}
 
       <div className="space-y-2">
         <Label htmlFor="notes" className="text-sm font-medium text-muted-foreground">
-          Notes (optional)
+          {t("add.notesOptional")}
         </Label>
         <Input
           id="notes"
           name="notes"
           type="text"
-          placeholder="e.g. After breakfast"
+          placeholder={t("add.notesPlaceholder")}
           className="h-11"
         />
       </div>
@@ -130,7 +154,7 @@ export function AddGlucoseForm() {
       )}
       {state?.success && (
         <>
-          <p className="text-sm text-success">Saved.</p>
+          <p className="text-sm text-success">{t("add.saved")}</p>
           {state.value != null && <SmartGlucoseAlerts value={state.value} />}
         </>
       )}
@@ -140,7 +164,7 @@ export function AddGlucoseForm() {
         disabled={pending}
         className="h-12 w-full text-base font-medium"
       >
-        {pending ? "Saving…" : "Save reading"}
+        {pending ? t("add.saving") : t("add.saveReading")}
       </Button>
     </form>
   );

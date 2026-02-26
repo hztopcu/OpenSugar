@@ -38,7 +38,7 @@ export function GlucoseTrendSection({
               <LineChart className="h-5 w-5 text-[hsl(var(--health-blue))]" strokeWidth={1.8} />
             </div>
             <div>
-              <h2 className="text-xl font-bold tracking-tight">Glucose Trend</h2>
+              <h2 className="text-xl font-bold tracking-tight">Blood Glucose Trend</h2>
               <p className="text-sm text-muted-foreground mt-0.5">
                 Healthy zone 70–140 mg/dL
               </p>

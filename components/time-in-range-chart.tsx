@@ -1,6 +1,7 @@
 "use client";
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { useLanguage } from "@/components/language-provider";
 
 const COLORS = {
   hypo: "hsl(var(--health-blue))",
@@ -17,18 +18,19 @@ interface TiRData {
 }
 
 export function TimeInRangeChart({ data }: { data: TiRData }) {
+  const { t } = useLanguage();
   const total = data.hypo + data.inRange + data.slightlyHigh + data.high;
   const chartData = [
-    { name: "Below (<70)", value: data.hypo, color: COLORS.hypo },
-    { name: "In range", value: data.inRange, color: COLORS.inRange },
-    { name: "Slightly high", value: data.slightlyHigh, color: COLORS.slightlyHigh },
-    { name: "High", value: data.high, color: COLORS.high },
+    { name: t("report.hypo"), value: data.hypo, color: COLORS.hypo },
+    { name: t("report.inRange"), value: data.inRange, color: COLORS.inRange },
+    { name: t("report.slightlyHigh"), value: data.slightlyHigh, color: COLORS.slightlyHigh },
+    { name: t("report.high"), value: data.high, color: COLORS.high },
   ].filter((d) => d.value > 0);
 
   if (total === 0) {
     return (
       <div className="h-[220px] flex items-center justify-center text-muted-foreground text-sm">
-        No glucose data for Time-in-Range
+        {t("report.noTirData")}
       </div>
     );
   }

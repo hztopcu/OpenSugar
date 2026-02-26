@@ -14,6 +14,7 @@ import {
   ReferenceDot,
   Legend,
 } from "recharts";
+import { useLanguage } from "@/components/language-provider";
 
 const MED_COLORS = ["#0c8ee6", "#e67e22", "#9b59b6", "#1abc9c", "#e74c3c"];
 
@@ -46,6 +47,7 @@ interface TrendChartProps {
 
 /** 3-day moving average: daily averages then rolling 3-day window */
 export function TrendChart({ data, medicationEvents = [], days = 7 }: TrendChartProps) {
+  const { t } = useLanguage();
   const chartData = useMemo(() => {
     const withTime = data.map((d) => ({
       ...d,
@@ -143,7 +145,7 @@ export function TrendChart({ data, medicationEvents = [], days = 7 }: TrendChart
           <Line
             type="monotone"
             dataKey="value"
-            name="Glucose"
+            name={t("chart.bloodGlucose")}
             stroke="hsl(var(--health-blue))"
             strokeWidth={2.5}
             dot={{ fill: "hsl(var(--health-blue))", r: 4, strokeWidth: 0 }}
@@ -155,7 +157,7 @@ export function TrendChart({ data, medicationEvents = [], days = 7 }: TrendChart
           <Line
             type="monotone"
             dataKey="movingAvg"
-            name="Moving avg"
+            name={t("chart.movingAvg")}
             stroke="hsl(var(--muted-foreground))"
             strokeWidth={2}
             strokeDasharray="5 5"

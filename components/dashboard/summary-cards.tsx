@@ -14,26 +14,13 @@ function getStatus(value: number): Status {
   return "high";
 }
 
-const statusConfig: Record<
-  Status,
-  { label: string; className: string; badgeClass: string }
-> = {
-  low: {
-    label: "Low",
-    className: "text-primary",
-    badgeClass: "bg-primary/10 text-primary border-primary/20",
-  },
-  normal: {
-    label: "Normal",
-    className: "text-success",
-    badgeClass: "bg-success/10 text-success border-success/20",
-  },
-  high: {
-    label: "High",
-    className: "text-destructive",
-    badgeClass: "bg-destructive/10 text-destructive border-destructive/20",
-  },
-};
+function getStatusConfig(t: (key: string) => string): Record<Status, { label: string; className: string; badgeClass: string }> {
+  return {
+    low: { label: t("dashboard.low"), className: "text-primary", badgeClass: "bg-primary/10 text-primary border-primary/20" },
+    normal: { label: t("dashboard.normal"), className: "text-success", badgeClass: "bg-success/10 text-success border-success/20" },
+    high: { label: t("dashboard.high"), className: "text-destructive", badgeClass: "bg-destructive/10 text-destructive border-destructive/20" },
+  };
+}
 
 interface LatestReadingData {
   value: number;
@@ -55,17 +42,18 @@ interface NextCheckData {
 
 export function LastReadingCard({ latest }: { latest: LatestReadingData | null }) {
   const { t } = useLanguage();
+  const statusConfig = getStatusConfig(t);
   if (!latest) {
     return (
       <Card className="overflow-hidden transition-smooth hover:shadow-soft">
         <CardContent className="flex flex-col items-center justify-center py-10">
-          <p className="text-sm font-medium text-muted-foreground">Last Reading</p>
-          <p className="mt-1 text-xs text-muted-foreground">No readings yet</p>
+          <p className="text-sm font-medium text-muted-foreground">{t("dashboard.lastReading")}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("dashboard.noReadingsYet")}</p>
           <Link
             href="/add"
             className="mt-3 text-sm font-medium text-primary hover:underline"
           >
-            Add your first reading
+            {t("dashboard.addFirstReadingLink")}
           </Link>
         </CardContent>
       </Card>
@@ -83,7 +71,7 @@ export function LastReadingCard({ latest }: { latest: LatestReadingData | null }
     <Card className="overflow-hidden transition-smooth hover:shadow-soft">
       <CardContent className="p-5">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Last Reading
+          {t("dashboard.lastReading")}
         </p>
         <p className="mt-0.5 text-xs text-muted-foreground">
           {latest.type} · {time}
@@ -115,11 +103,12 @@ export function AveragesCard({
   last7DayAverage,
   last7DayCount,
 }: AveragesData) {
+  const { t } = useLanguage();
   return (
     <Card className="transition-smooth hover:shadow-soft">
       <CardContent className="p-5">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Averages
+          {t("dashboard.averages")}
         </p>
         <div className="mt-3 space-y-4">
           <div>
@@ -129,7 +118,7 @@ export function AveragesCard({
                 <span className="ml-1 text-sm font-normal text-muted-foreground">mg/dL</span>
               )}
             </p>
-            <p className="text-xs text-muted-foreground">Daily average</p>
+            <p className="text-xs text-muted-foreground">{t("dashboard.dailyAverage")}</p>
           </div>
           <div className="border-t border-border pt-3">
             <p className="text-2xl font-bold tabular-nums text-foreground">
@@ -138,7 +127,7 @@ export function AveragesCard({
                 <span className="ml-1 text-sm font-normal text-muted-foreground">mg/dL</span>
               )}
             </p>
-            <p className="text-xs text-muted-foreground">7-day average</p>
+            <p className="text-xs text-muted-foreground">{t("dashboard.sevenDayAverage")}</p>
           </div>
         </div>
       </CardContent>
@@ -152,7 +141,7 @@ export function NextCheckCard({ nextCheckAt, progressPercent }: NextCheckData) {
     <Card className="transition-smooth hover:shadow-soft">
       <CardContent className="p-5">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Next Check
+          {t("dashboard.nextCheck")}
         </p>
         <div className="mt-3">
           {nextCheckAt ? (
@@ -163,7 +152,7 @@ export function NextCheckCard({ nextCheckAt, progressPercent }: NextCheckData) {
                   minute: "2-digit",
                 })}
               </p>
-              <p className="text-xs text-muted-foreground mt-0.5">Suggested</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{t("dashboard.suggested")}</p>
               <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
                   className="h-full rounded-full bg-primary/60 transition-all duration-300"
@@ -175,7 +164,7 @@ export function NextCheckCard({ nextCheckAt, progressPercent }: NextCheckData) {
             <>
               <p className="text-xl font-semibold text-muted-foreground">—</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Log a reading to get suggestions
+                {t("dashboard.logToGetSuggestions")}
               </p>
             </>
           )}

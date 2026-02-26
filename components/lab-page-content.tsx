@@ -1,6 +1,7 @@
 "use client";
 
 import { LabResultForm } from "@/components/lab-result-form";
+import { LabPdfUpload } from "@/components/lab-pdf-upload";
 import { LabResultsTable } from "@/components/lab-results-table";
 import { Hba1cChart } from "@/components/hba1c-chart";
 import { LabAnalysisView } from "@/components/lab-analysis-view";
@@ -23,6 +24,15 @@ export function LabPageContent({ results }: { results: LabResultRow[] }) {
       </div>
 
       <div className="space-y-6 px-4 pb-24 md:px-6 md:pb-8">
+        <Card className="overflow-hidden transition-smooth hover:shadow-soft">
+          <CardHeader>
+            <span className="font-semibold">{t("lab.uploadLabReport")}</span>
+          </CardHeader>
+          <CardContent>
+            <LabPdfUpload />
+          </CardContent>
+        </Card>
+
         <Card className="overflow-hidden transition-smooth hover:shadow-soft">
           <CardHeader>
             <span className="font-semibold">{t("lab.addResult")}</span>

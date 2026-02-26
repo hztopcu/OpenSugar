@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
           key={loc}
           type="button"
           onClick={() => setLocale(loc)}
-          aria-label={loc === "en" ? "English" : "Türkçe"}
+          aria-label={loc === "en" ? "English" : "Turkish"}
           className={cn(
             "min-w-[2.25rem] rounded-md px-2.5 py-1.5 text-sm font-medium transition-smooth",
             locale === loc

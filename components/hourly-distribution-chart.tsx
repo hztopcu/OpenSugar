@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useLanguage } from "@/components/language-provider";
 
 interface Point {
   created_at: Date;
@@ -9,6 +10,7 @@ interface Point {
 }
 
 export function HourlyDistributionChart({ data }: { data: Point[] }) {
+  const { t } = useLanguage();
   const hourly = useMemo(() => {
     const byHour = Array.from({ length: 24 }, (_, h) => ({ hour: h, sum: 0, count: 0 }));
     for (const p of data) {
@@ -27,7 +29,7 @@ export function HourlyDistributionChart({ data }: { data: Point[] }) {
   if (!hasAny) {
     return (
       <div className="h-[220px] flex items-center justify-center text-muted-foreground text-sm">
-        No data for hourly distribution
+        {t("chart.noHourlyData")}
       </div>
     );
   }
@@ -41,10 +43,10 @@ export function HourlyDistributionChart({ data }: { data: Point[] }) {
           <YAxis tick={{ fontSize: 11 }} tickLine={false} axisLine={false} width={32} />
           <Tooltip
             contentStyle={{ borderRadius: "var(--radius)", border: "1px solid hsl(var(--border))", backgroundColor: "hsl(var(--card))" }}
-            formatter={(value: number) => [value, "Avg mg/dL"]}
-            labelFormatter={(label) => `Hour ${label}`}
+            formatter={(value: number) => [value, t("chart.avgMgDl")]}
+            labelFormatter={(label) => t("chart.hourLabel").replace("{{label}}", label)}
           />
-          <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name="Avg glucose" />
+          <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name={t("chart.avgGlucose")} />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -27,12 +27,13 @@ export function ReportLabSummary({ results }: { results: LabLatest[] }) {
   }
 
   const labels: Record<string, string> = {
-    HbA1c: "HbA1c",
-    HDL: "HDL",
-    LDL: "LDL",
-    Triglycerides: "Triglycerides",
-    BP_Systolic: "BP (systolic)",
-    BP_Diastolic: "BP (diastolic)",
+    HbA1c: t("report.labHbA1c"),
+    HDL: t("report.labHdl"),
+    LDL: t("report.labLdl"),
+    Triglycerides: t("report.labTriglycerides"),
+    BP_Systolic: t("report.labBpSystolic"),
+    BP_Diastolic: t("report.labBpDiastolic"),
+    Glucose: t("report.glucose"),
   };
 
   return (

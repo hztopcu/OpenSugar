@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown, ArrowUp, ArrowDown, ChevronDown, ChevronUp, List } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useLanguage } from "@/components/language-provider";
 
 type SortKey = "created_at" | "value" | "type";
 type SortDir = "asc" | "desc";
@@ -55,6 +56,7 @@ const statusTintClass: Record<string, string> = {
 };
 
 export function HistorySection({ logs }: { logs: LogRow[] }) {
+  const { t } = useLanguage();
   const [sortKey, setSortKey] = useState<SortKey>("created_at");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
@@ -103,9 +105,9 @@ export function HistorySection({ logs }: { logs: LogRow[] }) {
             <List className="h-5 w-5 text-[hsl(var(--health-evening))]" strokeWidth={1.8} />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight">History</h2>
+            <h2 className="text-xl font-bold tracking-tight">{t("dashboard.history")}</h2>
             <p className="text-sm text-muted-foreground">
-              Date & time · Value · Type · Notes
+              {t("dashboard.historyHint")}
             </p>
           </div>
         </div>
@@ -113,12 +115,12 @@ export function HistorySection({ logs }: { logs: LogRow[] }) {
       <CardContent>
         {empty ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-sm text-muted-foreground">No logs yet</p>
+            <p className="text-sm text-muted-foreground">{t("dashboard.noLogsYet")}</p>
             <Link
               href="/add"
               className="mt-3 text-sm font-semibold text-[hsl(var(--health-blue))] hover:underline"
             >
-              Add your first reading
+              {t("dashboard.addFirstReadingLink")}
             </Link>
           </div>
         ) : (
@@ -134,7 +136,7 @@ export function HistorySection({ logs }: { logs: LogRow[] }) {
                         className="-ml-2 h-8 font-medium text-muted-foreground hover:text-foreground"
                         onClick={() => toggleSort("created_at")}
                       >
-                        Date & time
+                        {t("dashboard.dateTime")}
                         <SortIcon column="created_at" />
                       </Button>
                     </TableHead>
@@ -145,7 +147,7 @@ export function HistorySection({ logs }: { logs: LogRow[] }) {
                         className="-ml-2 h-8 font-medium text-muted-foreground hover:text-foreground"
                         onClick={() => toggleSort("value")}
                       >
-                        Value
+                        {t("dashboard.value")}
                         <SortIcon column="value" />
                       </Button>
                     </TableHead>
@@ -156,11 +158,11 @@ export function HistorySection({ logs }: { logs: LogRow[] }) {
                         className="-ml-2 h-8 font-medium text-muted-foreground hover:text-foreground"
                         onClick={() => toggleSort("type")}
                       >
-                        Type
+                        {t("dashboard.type")}
                         <SortIcon column="type" />
                       </Button>
                     </TableHead>
-                    <TableHead className="text-muted-foreground">Notes</TableHead>
+                    <TableHead className="text-muted-foreground">{t("dashboard.notes")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

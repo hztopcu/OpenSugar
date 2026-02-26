@@ -28,7 +28,7 @@ export function ProfileDrawer() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Profile and settings"
+        aria-label={t("profile.title")}
         className={cn(
           "fixed inset-0 z-[60] md:hidden",
           "transition-opacity duration-150",
@@ -49,12 +49,12 @@ export function ProfileDrawer() {
         >
           <div className="flex flex-col p-4">
             <div className="flex items-center justify-between border-b border-border pb-4">
-              <h2 className="text-lg font-semibold">Profile</h2>
+              <h2 className="text-lg font-semibold">{t("profile.title")}</h2>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-smooth"
-                aria-label="Close"
+                aria-label={t("profile.close")}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -62,7 +62,7 @@ export function ProfileDrawer() {
             <div className="mt-4 space-y-4">
               <div>
                 <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Language
+                  {t("profile.language")}
                 </p>
                 <LanguageSwitcher />
               </div>

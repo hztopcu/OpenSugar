@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/language-provider";
 
 export function Fab() {
+  const { t } = useLanguage();
   return (
     <Link
       href="/add"
@@ -15,7 +17,7 @@ export function Fab() {
         "transition-smooth hover:opacity-90 active:scale-95",
         "md:h-16 md:w-16"
       )}
-      aria-label="Add new entry"
+      aria-label={t("fab.addNewEntry")}
     >
       <Plus className="h-6 w-6 md:h-7 md:w-7" />
     </Link>

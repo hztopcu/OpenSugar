@@ -4,13 +4,37 @@ import { revalidatePath } from "next/cache";
 import { sql } from "@vercel/postgres";
 import { auth } from "@/auth";
 import type { LabResultRow } from "@/lib/db";
-import type { AddGlucoseState, AddMedicationState, AddMedicationLogState, AddLabResultState } from "./action-types";
+import type { AddGlucoseState, AddMedicationState, AddMedicationLogState, AddLabResultState, UploadLabPdfState } from "./action-types";
+import { extractLabEntriesFromText } from "@/lib/pdf-lab-extract";
 
 const VALID_GLUCOSE_TYPES = ["Fasting", "Pre-Meal", "Post-Meal", "Bedtime", "Other"] as const;
 
 async function getUserId(): Promise<string | null> {
   const session = await auth();
   return session?.user?.id ?? null;
+}
+
+function parseMeasuredAt(value: string | null): Date {
+  if (!value) return new Date();
+  const trimmed = value.trim();
+  if (!trimmed) return new Date();
+  const [datePart, timePart] = trimmed.split("T");
+  if (!datePart || !timePart) return new Date();
+  const [yearStr, monthStr, dayStr] = datePart.split("-");
+  const [hourStr, minuteStr] = timePart.split(":");
+  const year = Number(yearStr);
+  const month = Number(monthStr);
+  const day = Number(dayStr);
+  const hour = Number(hourStr);
+  const minute = Number(minuteStr);
+  const d = new Date(
+    Number.isFinite(year) ? year : new Date().getFullYear(),
+    Number.isFinite(month) ? month - 1 : new Date().getMonth(),
+    Number.isFinite(day) ? day : new Date().getDate(),
+    Number.isFinite(hour) ? hour : 0,
+    Number.isFinite(minute) ? minute : 0
+  );
+  return Number.isNaN(d.getTime()) ? new Date() : d;
 }
 
 // ---- Glucose ----
@@ -22,6 +46,7 @@ export async function addGlucoseLog(
   const valueStr = formData.get("value") as string | null;
   const type = (formData.get("type") as string)?.trim();
   const notes = (formData.get("notes") as string | null)?.trim() || null;
+  const measuredAtStr = formData.get("measured_at") as string | null;
 
   if (!valueStr || !type) return { error: "Value and type are required." };
 
@@ -33,9 +58,11 @@ export async function addGlucoseLog(
     return { error: "Type must be Fasting, Pre-Meal, Post-Meal, Bedtime, or Other." };
 
   try {
+    const measuredAt = parseMeasuredAt(measuredAtStr);
+    const createdAt = measuredAt.toISOString();
     await sql`
-      INSERT INTO glucose_logs (user_id, value, type, notes)
-      VALUES (${userId}, ${value}, ${type}, ${notes})
+      INSERT INTO glucose_logs (user_id, value, type, notes, created_at)
+      VALUES (${userId}, ${value}, ${type}, ${notes}, ${createdAt})
     `;
     revalidatePath("/");
     revalidatePath("/report");
@@ -245,6 +272,60 @@ export async function getLabResults(): Promise<LabResultRow[]> {
   } catch (e) {
     console.error("getLabResults:", e);
     return [];
+  }
+}
+
+const MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
+
+/** Parse uploaded PDF, extract lab markers, and save to lab_results. */
+export async function parseAndSaveLabPdf(
+  _prev: UploadLabPdfState,
+  formData: FormData
+): Promise<UploadLabPdfState> {
+  const userId = await getUserId();
+  if (!userId) return { error: "Sign in to upload a lab report." };
+
+  const file = formData.get("file") as File | null;
+  if (!file || !(file instanceof File)) return { error: "No file provided." };
+  if (file.type !== "application/pdf")
+    return { error: "Only PDF files are allowed." };
+  if (file.size > MAX_PDF_SIZE_BYTES)
+    return { error: "File is too large (max 10 MB)." };
+
+  try {
+    const { PDFParse } = await import("pdf-parse");
+    const arrayBuffer = await file.arrayBuffer();
+    const parser = new PDFParse({ data: new Uint8Array(arrayBuffer) });
+    const result = await parser.getText();
+    const text = result?.text ?? "";
+    await parser.destroy();
+
+    if (!text.trim()) return { error: "Could not extract text from this PDF." };
+
+    const { date, entries } = extractLabEntriesFromText(text);
+    if (entries.length === 0)
+      return { error: "No lab markers (e.g. HbA1c, Glucose, HDL, LDL) found in the PDF." };
+
+    const testDate =
+      date &&
+      /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+      !Number.isNaN(Date.parse(date))
+        ? date
+        : new Date().toISOString().slice(0, 10);
+
+    for (const e of entries) {
+      await sql`
+        INSERT INTO lab_results (user_id, test_name, value, unit, test_date)
+        VALUES (${userId}, ${e.test_name}, ${e.value}, ${e.unit}, ${testDate})
+      `;
+    }
+
+    revalidatePath("/lab");
+    revalidatePath("/report");
+    return { success: true, extractedCount: entries.length };
+  } catch (err) {
+    console.error("parseAndSaveLabPdf:", err);
+    return { error: "Failed to process PDF. The file may be scanned or corrupted." };
   }
 }
 

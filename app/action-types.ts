@@ -4,3 +4,4 @@ export type AddGlucoseState = { error?: string; success?: boolean; value?: numbe
 export type AddMedicationState = { error?: string; success?: boolean };
 export type AddMedicationLogState = { error?: string; success?: boolean };
 export type AddLabResultState = { error?: string; success?: boolean };
+export type UploadLabPdfState = { error?: string; success?: boolean; extractedCount?: number };

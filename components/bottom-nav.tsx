@@ -49,7 +49,7 @@ export function BottomNav() {
           >
             <Icon className="h-6 w-6 shrink-0" />
             <span className="text-[10px] font-medium">
-              {key === "nav.dashboard" ? t("nav.dashboard") : key === "nav.addEntry" ? "Add" : key === "nav.medications" ? "Meds" : key === "nav.lab" ? "Lab" : "Report"}
+              {t(key)}
             </span>
           </Link>
         );
