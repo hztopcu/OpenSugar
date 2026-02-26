@@ -1,20 +1,21 @@
+/**
+ * Edge-only middleware. Do NOT import auth, db, path, or any Node-only modules.
+ * Only "next/server" is allowed. Cookie check is intentional to avoid next-auth/jwt (uses __dirname).
+ */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const SESSION_COOKIE_NAMES = [
-  "__Secure-authjs.session-token",
-  "authjs.session-token",
-] as const;
+export default function middleware(request: NextRequest) {
+  const sessionCookie =
+    request.cookies.get("__Secure-authjs.session-token") ??
+    request.cookies.get("authjs.session-token");
 
-export default function middleware(req: NextRequest) {
-  const hasSession = SESSION_COOKIE_NAMES.some(
-    (name) => req.cookies.get(name)?.value
-  );
-  if (!hasSession) {
-    const url = new URL("/login", req.nextUrl.origin);
-    url.searchParams.set("callbackUrl", req.nextUrl.pathname);
-    return Response.redirect(url);
+  if (!sessionCookie?.value) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
+
   return NextResponse.next();
 }
 
