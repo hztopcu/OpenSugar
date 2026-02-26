@@ -1,32 +1,19 @@
-/**
- * NUCLEAR ISOLATION: No auth, db, path, fs, os. Cookie-only session check.
- * runtime = 'nodejs' bypasses Edge to avoid __dirname in bundled deps.
- */
-export const runtime = "nodejs";
-
-import { NextResponse } from "next/server";
-
-type RequestWithCookies = Request & {
-  cookies: { get(name: string): { value?: string } | undefined };
-};
-
+// NextResponse importunu tamamen kaldır ve şunları kullan:
 export default function middleware(request: Request) {
-  const req = request as RequestWithCookies;
-  const session =
-    req.cookies?.get?.("__Secure-authjs.session-token")?.value ??
-    req.cookies?.get?.("authjs.session-token")?.value;
+  const cookieHeader = request.headers.get("cookie") || "";
+  const session = cookieHeader.includes("__Secure-authjs.session-token") ||
+    cookieHeader.includes("authjs.session-token");
 
   if (!session) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", new URL(request.url).pathname);
-    return Response.redirect(loginUrl, 302);
+    const url = new URL(request.url);
+    if (!["/api", "/_next", "/favicon.ico", "/login", "/signup"].some(path => url.pathname.startsWith(path))) {
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("callbackUrl", url.pathname);
+      return Response.redirect(loginUrl, 302);
+    }
   }
 
-  return NextResponse.next();
+  return new Response(null, {
+    headers: { 'x-middleware-next': '1' } // Next.js'e devam et komutu
+  });
 }
-
-export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|login|signup).*)",
-  ],
-};
