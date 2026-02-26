@@ -1,130 +1,93 @@
-# OpenSugar
+<!-- README.md (Apple-style, HTML + Markdown compatible) -->
 
-A patient-focused blood glucose tracker.
+<div align="center">
+  <h1>OpenSugar</h1>
+  <p>A calm, colorful, Apple Health–inspired personal glucose journal.</p>
 
-**A calm place to log your daily glucose, see your trends, and keep a clear picture of your numbers.**
+  <p>
+    <img alt="Non-Commercial Only" src="https://img.shields.io/badge/Non--Commercial-Only-8b5cf6?style=flat" />
+    <img alt="Patient First" src="https://img.shields.io/badge/Patient-First-3b82f6?style=flat" />
+    <img alt="Privacy Friendly" src="https://img.shields.io/badge/Privacy-Friendly-10b981?style=flat" />
+  </p>
 
----
+  <p>
+    Designed for patients to log <b>morning</b> and <b>evening</b> glucose values, view trends, and keep a simple history — without stress.
+  </p>
+</div>
 
-## Philosophy
+<hr/>
 
-- **Patient-first.** Built for people who track their blood sugar day to day—not for dashboards or enterprise.
-- **Calm daily tracking.** Logging should feel simple and unobtrusive, not overwhelming.
-- **Apple-inspired design.** Soft colors, rounded cards, and clear typography. The interface stays minimal and friendly.
-- **Simplicity over complexity.** Only what you need: log, view trends, review history. No clutter.
+<h2>What it is</h2>
+<ul>
+  <li>🩸 A personal blood glucose tracker (morning & evening entries)</li>
+  <li>📈 A simple trend view (7 / 14 / 30 days) with a healthy-range overlay</li>
+  <li>🟢 Time-in-range ring + clean history list/table</li>
+</ul>
 
----
+<h2>What it isn’t</h2>
+<ul>
+  <li>Not a medical device</li>
+  <li>Not medical advice or a replacement for professional care</li>
+  <li>Not a hospital/clinic management system</li>
+</ul>
 
-## Core Features
+<hr/>
 
-- **Morning & evening logging** — Quick add from the dashboard; full entry form when you need type and notes.
-- **Trend visualization** — 7, 14, and 30-day views with a healthy range (70–140 mg/dL) and smooth curves.
-- **Time-in-range ring** — See at a glance what share of readings falls below, in, or above range.
-- **Clean history** — Chronological list and table; optional notes; status at a glance.
-- **Light & dark mode** — Same clarity in either theme.
+<h2>Philosophy</h2>
+<ul>
+  <li><b>Patient-first:</b> calm daily tracking, not intimidating dashboards.</li>
+  <li><b>Apple-inspired UI:</b> colorful modules, soft gradients, friendly icons.</li>
+  <li><b>Simple by design:</b> log, view trend, review history. Nothing extra.</li>
+</ul>
 
----
+<h2>Core Features</h2>
+<ul>
+  <li><b>Morning & Evening logging</b> with optional notes</li>
+  <li><b>Glucose trend</b> with smooth chart + healthy zone (70–140 mg/dL)</li>
+  <li><b>Time in range</b> ring visualization</li>
+  <li><b>History</b> (mobile-friendly list / desktop table)</li>
+  <li><b>Light & Dark mode</b></li>
+</ul>
 
-## Design Language
+<h2>Design Language</h2>
+<ul>
+  <li>Inspired by <b>Apple Health</b> visual DNA (colorful modules, soft depth)</li>
+  <li>Rounded cards, vibrant but gentle gradients</li>
+  <li>Color-coded statuses (calm, friendly, never alarming)</li>
+  <li>Subtle micro-interactions (smooth, refined, minimal)</li>
+</ul>
 
-The app is visually inspired by Apple Health:
+<hr/>
 
-- Rounded, colorful cards with soft shadows.
-- Soft gradients (e.g. header and key actions).
-- Friendly micro-interactions: gentle hover, light feedback on save.
-- Color used meaningfully: blue for low, green for in range, orange and pink-red for high—never harsh.
+<h2>Privacy & Data</h2>
+<ul>
+  <li>No ads</li>
+  <li>No tracking</li>
+  <li>Your data belongs to you</li>
+  <li>Local-first friendly (can run fully locally)</li>
+</ul>
 
----
+<h2>Non-Commercial Use Only</h2>
+<ul>
+  <li>✅ Personal and non-commercial use is permitted.</li>
+  <li>❌ Commercial use is not permitted (including selling, bundling, or offering as a paid service).</li>
+  <li>✅ You may modify and share for non-commercial purposes.</li>
+</ul>
+<p><i>If you need commercial use, contact the author.</i></p>
 
-## Privacy & Data
+<h2>Medical Disclaimer</h2>
+<ul>
+  <li>This app is provided for personal tracking purposes only.</li>
+  <li>It is <b>not</b> a medical device and does not provide medical advice.</li>
+  <li>Always consult qualified healthcare professionals for medical decisions.</li>
+</ul>
 
-- **No ads.** The app does not show advertisements.
-- **No tracking.** No analytics or third-party tracking of your use.
-- **Your data belongs to you.** Logs are stored in your own database (or locally); we do not collect or sell your data.
-- **Runs locally.** You can self-host and keep everything on your own infrastructure.
+<hr/>
 
----
+## Quick Start
 
-## Non-Commercial Use Only
-
-This project is **open-source and free for personal and non-commercial use only.**
-
-**Commercial use is not permitted.** You may not use this software, in whole or in part, for any commercial product, service, or business without explicit permission. It is intended for individuals tracking their own health and for non-commercial community use.
-
-If you are unsure whether your use is permitted, please open an issue before proceeding.
-
----
-
-## Medical Disclaimer
-
-This app is **not a medical device** and is not intended to diagnose, treat, or prevent any condition.
-
-It is a **personal tracking tool** only. It does not replace professional medical advice, and it is not suitable for making treatment decisions on its own. Always follow your healthcare provider’s guidance. In case of hypoglycemia, hyperglycemia, or any medical emergency, seek immediate professional care.
-
-The authors and contributors are not liable for any decisions or outcomes based on data or alerts from this app.
-
----
-
-## Getting Started
-
-**Requirements:** Node.js 18+, a Postgres database (e.g. [Neon](https://neon.tech) or [Vercel Postgres](https://vercel.com/storage/postgres)).
-
-1. **Clone and install**
-
-   ```bash
-   git clone https://github.com/your-username/opensugar.git
-   cd opensugar
-   npm install
-   ```
-
-2. **Configure environment**
-
-   Create `.env.local` in the project root:
-
-   ```env
-   APP_USER=your_username
-   APP_PASSWORD=your_secure_password
-   AUTH_SECRET=your_random_secret
-   POSTGRES_URL=postgres://...
-   ```
-
-   Use a strong password and a random string for `AUTH_SECRET`. Get `POSTGRES_URL` from your Postgres provider.
-
-3. **Create database tables**
-
-   After the app is running once, call the setup endpoint (or run the SQL in `sql/` in order):
-
-   ```
-   GET http://localhost:3000/api/setup
-   ```
-
-   See the `sql/` folder for manual schema steps and migrations.
-
-4. **Run the app**
-
-   ```bash
-   npm run dev
-   ```
-
-   Open [http://localhost:3000](http://localhost:3000). Sign in with `APP_USER` and `APP_PASSWORD`.
-
-**Deploying:** The app runs on [Vercel](https://vercel.com). Connect your repo, add a Postgres database, set the same environment variables, and deploy. Run the setup endpoint after the first deploy if tables do not yet exist.
-
----
-
-## Open Source & Contribution
-
-OpenSugar is built for the community. Contributions—ideas, bug reports, code, and documentation—are welcome.
-
-Please respect the **non-commercial** intent of the project. By contributing, you agree that your work may be used under the same terms. Keep the tone calm and the code clear.
-
-1. Open an issue or discussion for bugs and ideas.
-2. Fork the repo, create a branch, make your changes.
-3. Ensure `npm run build` and `npm run lint` pass.
-4. Open a pull request with a short description.
-
----
-
-## License
-
-See [LICENSE](LICENSE) in this repository. Use is permitted for **personal and non-commercial purposes only**. Commercial use is not permitted without explicit permission.
+```bash
+git clone https://github.com/YOUR-USERNAME/OpenSugar.git
+cd OpenSugar
+npm install
+npm run dev
