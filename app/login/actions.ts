@@ -14,12 +14,15 @@ export async function loginAction(formData: FormData) {
       username: username?.trim() ?? "",
       password: password ?? "",
       redirectTo: safeCallback,
+      redirect: false,
     });
   } catch (err: unknown) {
-    // Başarılı girişte NextAuth NEXT_REDIRECT fırlatır — onu yeniden fırlatıyoruz.
     const d = (err as { digest?: string })?.digest;
-    if (d === "NEXT_REDIRECT") throw err;
-    // Giriş başarısız (CredentialsSignin): login sayfasına hata ile yönlendir
+    if (d === "NEXT_REDIRECT") {
+      throw err;
+    }
     redirect(`/login?error=CredentialsSignin&callbackUrl=${encodeURIComponent(safeCallback)}`);
   }
+
+  redirect(safeCallback);
 }
