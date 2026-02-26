@@ -1,7 +1,9 @@
 /**
- * STRICT ISOLATION: Only "next/server" → NextResponse is imported.
- * No @/auth, @/lib/db, path, fs, or app code. Cookie-only session check (avoids next-auth/jwt / __dirname).
+ * NUCLEAR ISOLATION: No auth, db, path, fs, os. Cookie-only session check.
+ * runtime = 'nodejs' bypasses Edge to avoid __dirname in bundled deps.
  */
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 
 type RequestWithCookies = Request & {
