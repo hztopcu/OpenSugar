@@ -1,24 +1,18 @@
-
- */
+// middleware.ts
 export function middleware(request: Request) {
-  const url = new URL(request.url);
-  const pathname = url.pathname;
-
-  //
   const cookieHeader = request.headers.get("cookie") || "";
-  const hasSession =
-    cookieHeader.includes("__Secure-authjs.session-token") ||
-    cookieHeader.includes("authjs.session-token") ||
-    cookieHeader.includes("next-auth.session-token"); // 
+  const hasSession = cookieHeader.includes("authjs.session-token") ||
+    cookieHeader.includes("__Secure-authjs.session-token");
 
-  // E
   if (!hasSession) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return Response.redirect(loginUrl, 302);
+    const url = new URL(request.url);
+
+    if (!["/login", "/signup", "/api", "/_next"].some(p => url.pathname.startsWith(p))) {
+      return Response.redirect(new URL("/login", request.url), 302);
+    }
   }
 
-  // 
+
   return new Response(null, {
     headers: { 'x-middleware-next': '1' }
   });
